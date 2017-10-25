@@ -718,7 +718,8 @@ static MQTTAsync_queuedCommand* MQTTAsync_restoreCommand(char* buffer, int bufle
 		case SUBSCRIBE:
 			command->details.sub.count = *(int*)ptr;
 			ptr += sizeof(int);
-
+			command->details.sub.topics = malloc(command->details.sub.count * sizeof(command->details.sub.topics));
+			command->details.sub.qoss = malloc(command->details.sub.count * sizeof(command->details.sub.qoss));
 			for (i = 0; i < command->details.sub.count; ++i)
 			{
 				data_size = strlen(ptr) + 1;
@@ -735,7 +736,7 @@ static MQTTAsync_queuedCommand* MQTTAsync_restoreCommand(char* buffer, int bufle
 		case UNSUBSCRIBE:
 			command->details.sub.count = *(int*)ptr;
 			ptr += sizeof(int);
-
+			command->details.unsub.topics = malloc(command->details.unsub.count * sizeof(command->details.unsub.topics));
 			for (i = 0; i < command->details.unsub.count; ++i)
 			{
 				size_t data_size = strlen(ptr) + 1;
